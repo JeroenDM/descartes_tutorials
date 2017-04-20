@@ -1,19 +1,19 @@
 # Descartes welding example
 
-We implemented an example of path planning for a welding robot.
+We implemented an example of path planning for a welding robot. The original code is written [Bart's repository](https://github.com/Bart123456/lasrobot_ws). It was in serious need of cleaning and refactoring, therefore we started from scratch in this repository, which is a fork of the original code.
 
-Because I new to ROS development an open to suggestions, I will explain how I orginizade my workspace to write and test this tutorial.
+Because I new to ROS development and open to suggestions, I will explain how I orginizade my workspace to write and test this tutorial. As IDE we use [RoboWare](http://www.roboware.me/), which is based on visual studio code.
 
-Everyting is in one (catkin) workspace, because using multiple workspaces caused problems. In the src folder of the workspaces I put all the git repos that containing the packages. This results in the following file structure:
+Everything is in one (catkin) workspace, because using multiple workspaces caused problems. In the src folder of the workspaces I put all the git repos that containing the packages. This results in the following file structure:
 
 
 descartes_ws/
   - build/
   - devel/
   - src/
-    - descartes/
+    - [descartes/](https://github.com/JeroenDM/descartes/tree/indigo-devel)
       - ...
-    - descartes_tutorials/
+    - [descartes_tutorials/](https://github.com/JeroenDM/descartes_tutorials)
       - descartes_tutorials/
       - .gitignore
       - LICENSE
@@ -21,7 +21,7 @@ descartes_ws/
       - kuka_kr120_with_torch/
       - kuka_kr120_with_torch_ikfast/
       - kuka_kr120_with_torch_moveit_config/
-    - motoman_robot/
+    - [motoman_robot/](https://github.com/ros-industrial/motoman)
       - motoman_sia20d_support/
       - motoman_sia20d_moveit_config/
     - CMakeLists.txt
