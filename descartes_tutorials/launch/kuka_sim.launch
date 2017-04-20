@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find kr120_with_torch_moveit_config)/launch/descartes_pathplanning.launch"></include>
+
+</launch>

@@ -6,7 +6,7 @@
 #include <actionlib/client/simple_action_client.h>
 
 // Includes the descartes robot model we will be using
-#include <descartes_moveit/moveit_state_adapter.h>
+#include <descartes_moveit/ikfast_moveit_state_adapter.h>
 // Includes the descartes trajectory type we will be using
 #include <descartes_trajectory/axial_symmetric_pt.h>
 #include <descartes_trajectory/cart_trajectory_pt.h>
@@ -48,25 +48,24 @@ int main(int argc, char** argv)
   spinner.start();
 
   // 1. Define sequence of points
+  double x, y, z, rx, ry, rz;
+  x = 0.8;
+  y = 0.0 + 0.025;
+  z = 0.112 + 0.025;
+  rx = (M_PI / 2) + M_PI/4;
+  ry = 0.0;
+  rz = -M_PI/2;
   TrajectoryVec points;
-  for (unsigned int i = 0; i < 10; ++i)
+  for (unsigned int i = 0; i < 9; ++i)
   {
     Eigen::Affine3d pose;
-    pose = Eigen::Translation3d(0.0, 0.0, 1.0 + 0.05 * i);
-    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(pose);
-    points.push_back(pt);
-  }
-
-  for (unsigned int i = 0; i < 5; ++i)
-  {
-    Eigen::Affine3d pose;
-    pose = Eigen::Translation3d(0.0, 0.04 * i, 1.3);
+    pose = descartes_core::utils::toFrame(x, y + 0.05 * i, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
     descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(pose);
     points.push_back(pt);
   }
 
   // 2. Create a robot model and initialize it
-  descartes_core::RobotModelPtr model (new descartes_moveit::MoveitStateAdapter);
+  descartes_core::RobotModelPtr model (new descartes_moveit::IkFastMoveitStateAdapter);
 
   // Name of description on parameter server. Typically just "robot_description".
   const std::string robot_description = "robot_description";
@@ -78,7 +77,7 @@ int main(int argc, char** argv)
   const std::string world_frame = "base_link";
 
   // tool center point frame (name of link associated with tool)
-  const std::string tcp_frame = "tool0";
+  const std::string tcp_frame = "tool_tip";
 
   if (!model->initialize(robot_description, group_name, world_frame, tcp_frame))
   {
