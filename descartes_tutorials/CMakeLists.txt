@@ -20,13 +20,20 @@ include_directories(
 )
 
  add_executable(${PROJECT_NAME}_tutorial1 src/tutorial1.cpp)
+  add_executable(${PROJECT_NAME}_tutorial2 src/tutorial2.cpp)
 
  target_link_libraries(${PROJECT_NAME}_tutorial1
+   ${catkin_LIBRARIES}
+ )
+ target_link_libraries(${PROJECT_NAME}_tutorial2
    ${catkin_LIBRARIES}
  )
 
 set_target_properties(${PROJECT_NAME}_tutorial1
   PROPERTIES OUTPUT_NAME tutorial1
+  PREFIX "")
+set_target_properties(${PROJECT_NAME}_tutorial2
+  PROPERTIES OUTPUT_NAME tutorial2
   PREFIX "")
 
 
@@ -35,6 +42,12 @@ set_target_properties(${PROJECT_NAME}_tutorial1
 #############
 
 install(TARGETS ${PROJECT_NAME}_tutorial1
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(TARGETS ${PROJECT_NAME}_tutorial2
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
