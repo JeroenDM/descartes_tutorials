@@ -4,6 +4,24 @@ We implemented an example of path planning for a welding robot. The original cod
 
 Because I new to ROS development and open to suggestions, I will explain how I orginizade my workspace to write and test this tutorial. As IDE we use [RoboWare](http://www.roboware.me/), which is based on visual studio code.
 
+## What we want to show in the tutorial
+
+- Visualization of a trajectory.
+- Adding collision objects.
+- (custom cost function)
+
+Reminders
+- Function to convert eigen pose to orientation toleranced point.
+- rviz config has to be adapted
+
+## What we would like to improve
+
+- Avoid big steps in task space.
+- Solve RAM problem.
+- Add tolerances in local tool frame.
+
+## Workspace organization
+
 Everything is in one (catkin) workspace, because using multiple workspaces caused problems. In the src folder of the workspaces I put all the git repos that containing the packages. This results in the following file structure:
 
 
@@ -15,6 +33,11 @@ descartes_ws/
       - ...
     - [descartes_tutorials/](https://github.com/JeroenDM/descartes_tutorials)
       - descartes_tutorials/
+      - tutorial_utitilies/
+        -include/
+          - visualization.h
+          - pose_generation.h
+          - collision_object_utils.h
       - .gitignore
       - LICENSE
     - [kuka_kr120_robot/](https://github.com/JeroenDM/kuka_kr120_robot)
