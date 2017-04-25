@@ -2,8 +2,6 @@
 
 We implemented an example of path planning for a welding robot. The original code is written [Bart's repository](https://github.com/Bart123456/lasrobot_ws). It was in serious need of cleaning and refactoring, therefore we started from scratch in this repository, which is a fork of the original code.
 
-Because I new to ROS development and open to suggestions, I will explain how I orginizade my workspace to write and test this tutorial. As IDE we use [RoboWare](http://www.roboware.me/), which is based on visual studio code.
-
 ## What we want to show in the tutorial
 
 - Visualization of a trajectory.
@@ -21,6 +19,8 @@ Reminders
 - Add tolerances in local tool frame.
 
 ## Workspace organization
+
+Because I new to ROS development and open to suggestions, I will explain how I orginizade my workspace to write and test this tutorial. As IDE we use [RoboWare](http://www.roboware.me/), which is based on visual studio code.
 
 Everything is in one (catkin) workspace, because using multiple workspaces caused problems. In the src folder of the workspaces I put all the git repos that containing the packages. This results in the following file structure:
 
