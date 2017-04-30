@@ -49,20 +49,16 @@ descartes_ws/
       - motoman_sia20d_moveit_config/
     - CMakeLists.txt
     
- # detailed planning of functions to add
- 
+ # Detailed planning of functions to add
  ## visualization
- 
  - createMarker
  - createVisualFrame
  - addVisualFrame
  
  ## path_generation
- 
  - line: generate a straight line of eigen poses all with the same orientation
  - circle: generate a circle of eigen poses around a fiven pose with a given radius
  
  ## collision_object_utils
- 
  - createCollisionObject
  - createObjectColor
