@@ -10,12 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   trajectory_msgs
 )
 
-catkin_package(
-  # INCLUDE_DIRS include
-  LIBRARIES tutorial_utilities
-  # CATKIN_DEPENDS tutorial_utilities
-  # DEPENDS eigen
-)
+catkin_package()
 
 ###########
 ## Build ##
@@ -25,15 +20,15 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
- add_executable(${PROJECT_NAME}_tutorial1 src/tutorial1.cpp)
-  add_executable(${PROJECT_NAME}_tutorial2 src/tutorial2.cpp)
+add_executable(${PROJECT_NAME}_tutorial1 src/tutorial1.cpp)
+add_executable(${PROJECT_NAME}_tutorial2 src/tutorial2.cpp)
 
- target_link_libraries(${PROJECT_NAME}_tutorial1
-   ${catkin_LIBRARIES}
- )
- target_link_libraries(${PROJECT_NAME}_tutorial2
-   ${catkin_LIBRARIES}
- )
+target_link_libraries(${PROJECT_NAME}_tutorial1
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_tutorial2
+  ${catkin_LIBRARIES}
+)
 
 set_target_properties(${PROJECT_NAME}_tutorial1
   PROPERTIES OUTPUT_NAME tutorial1

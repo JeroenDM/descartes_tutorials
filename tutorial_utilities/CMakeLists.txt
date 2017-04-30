@@ -5,13 +5,18 @@ project(tutorial_utilities)
 add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED)
-# find_package(Eigen REQUIRED)
 
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES tutorial_utilities
-  # CATKIN_DEPENDS descartes_core descartes_trajectory trajectory_msgs
-  DEPENDS eigen
+  INCLUDE_DIRS
+    include
+  LIBRARIES
+    tutorial_utilities
+  CATKIN_DEPENDS
+    descartes_core
+    descartes_trajectory
+    trajectory_msgs
+  DEPENDS
+    eigen
 )
 
 include_directories(
@@ -20,7 +25,7 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
-add_library(${PROJECT_NAME}
+add_library(tutorial_utilities
   src/path_generation.cpp
 )
 
@@ -29,6 +34,7 @@ add_dependencies(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
+  tutorial_utilities
   ${catkin_LIBRARIES}
 )
 
@@ -40,5 +46,5 @@ install(TARGETS ${PROJECT_NAME}
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  FILES_MATCHING PATTERN "*.h"
+  #FILES_MATCHING PATTERN "*.h"
 )
