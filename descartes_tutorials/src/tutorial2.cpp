@@ -13,7 +13,7 @@
 // Includes the planner we will be using
 #include <descartes_planner/dense_planner.h>
 
-#include <descartes_utilities/path_generation.h>
+#include <tutorial_utilities/path_generation.h>
 
 
 typedef std::vector<descartes_core::TrajectoryPtPtr> TrajectoryVec;
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
   Eigen::Affine3d endPose;
   startPose = descartes_core::utils::toFrame(x, y, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
   endPose = descartes_core::utils::toFrame(x, y + 0.4, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
-  poses = descartes_utilities::line(startPose, endPose, 9);
+  poses = tutorial_utilities::line(startPose, endPose, 9);
 
   for (unsigned int i = 0; i < 9; ++i)
   {

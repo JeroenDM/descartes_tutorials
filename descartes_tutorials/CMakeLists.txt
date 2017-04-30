@@ -6,11 +6,16 @@ find_package(catkin REQUIRED COMPONENTS
   descartes_moveit
   descartes_trajectory
   descartes_planner
-  descartes_utilities
+  tutorial_utilities
   trajectory_msgs
 )
 
-catkin_package()
+catkin_package(
+  # INCLUDE_DIRS include
+  LIBRARIES tutorial_utilities
+  # CATKIN_DEPENDS tutorial_utilities
+  # DEPENDS eigen
+)
 
 ###########
 ## Build ##
