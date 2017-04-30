@@ -2,6 +2,8 @@
 
 We implemented an example of path planning for a welding robot. The original code is written [Bart's repository](https://github.com/Bart123456/lasrobot_ws). It was in serious need of cleaning and refactoring, therefore we started from scratch in this repository, which is a fork of the original code.
 
+For our first contribution, we avoided changes things in the descartes core package. However, to include collision avoidance we had to make a small change to the moveit_state_adapter and the robot_model.
+
 ## What we want to show in the tutorial
 
 - Visualization of a trajectory.
