@@ -13,6 +13,9 @@
 // Includes the planner we will be using
 #include <descartes_planner/dense_planner.h>
 
+#include <descartes_utilities/path_generation.h>
+
+
 typedef std::vector<descartes_core::TrajectoryPtPtr> TrajectoryVec;
 typedef TrajectoryVec::const_iterator TrajectoryIter;
 
@@ -56,11 +59,17 @@ int main(int argc, char** argv)
   ry = 0.0;
   rz = -M_PI/2;
   TrajectoryVec points;
+
+  std::vector<Eigen::Affine3d> poses;
+  Eigen::Affine3d startPose;
+  Eigen::Affine3d endPose;
+  startPose = descartes_core::utils::toFrame(x, y, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
+  endPose = descartes_core::utils::toFrame(x, y + 0.4, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
+  poses = descartes_utilities::line(startPose, endPose, 9);
+
   for (unsigned int i = 0; i < 9; ++i)
   {
-    Eigen::Affine3d pose;
-    pose = descartes_core::utils::toFrame(x, y + 0.05 * i, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
-    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(pose);
+    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i]);
     points.push_back(pt);
   }
 
