@@ -16,7 +16,7 @@ Reminders
 
 ## What we would like to improve
 
-- Change in descartes core, moveit_state_adapter that the "tool0" name is not fixed
+- Change in descartes core, moveit_state_adapter that the "tool0" name is not fixed. SOLVED: by adding the new names as parameters in the launch file of the robot (moveit package, descartes_pathplanning.launch)
 - Avoid big steps in task space.
 - Solve RAM problem.
 - Add tolerances in local tool frame.
