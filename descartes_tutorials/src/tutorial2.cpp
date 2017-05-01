@@ -14,6 +14,7 @@
 #include <descartes_planner/dense_planner.h>
 
 #include <tutorial_utilities/path_generation.h>
+#include <tutorial_utilities/collision_object_utils.h>
 
 
 typedef std::vector<descartes_core::TrajectoryPtPtr> TrajectoryVec;
@@ -49,6 +50,8 @@ int main(int argc, char** argv)
   // Required for communication with moveit components
   ros::AsyncSpinner spinner (1);
   spinner.start();
+
+  tutorial_utilities::testCollisionUtils();
 
   // 1. Define sequence of points
   double x, y, z, rx, ry, rz;

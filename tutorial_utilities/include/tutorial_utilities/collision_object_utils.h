@@ -16,31 +16,25 @@
  * limitations under the License.
  */
 /*
- *  path_generation.cpp
+ *  collision_object_utils.h
  *
  *  Created on: Feb 28, 2016
  *  Author: Bart and Jeroen
  */
 
-#include <vector>
-#include </usr/include/eigen3/Eigen/Geometry>
+#ifndef DESCARTES_COLLISION_OBJECT_UTILS_H
+#define DESCARTES_COLLISION_OBJECT_UTILS_H
 
+#include <ros/ros.h>
 
 namespace tutorial_utilities
 {
-    std::vector<Eigen::Affine3d> line(	Eigen::Affine3d start_pose, Eigen::Affine3d end_pose, int steps)
-	{
-		Eigen::Vector3d translation_vector;
-		translation_vector = end_pose.translation() - start_pose.translation();
-		translation_vector = translation_vector / steps;
-		Eigen::Translation<double,3> translate(translation_vector);
+    /**
+    * Function to test library compilation
+    */
+    void testCollisionUtils();
 
-		std::vector<Eigen::Affine3d> poses;
-		poses.push_back(start_pose);
-		for(int i = 0; i < (steps - 1); ++i)
-		{
-			poses.push_back(translate * poses.back());
-		}
-		return poses;
-	}
+    //moveit_msgs::CollisionObject makeCollisionObject(std::string filepath, Eigen::Vector3d scale, std::string ID, Eigen::Affine3d pose);
 }
+
+#endif

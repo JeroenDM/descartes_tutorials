@@ -29,6 +29,7 @@ include_directories(
 
 add_library(tutorial_utilities
   src/path_generation.cpp
+  src/collision_object_utils.cpp
 )
 
 add_dependencies(${PROJECT_NAME} 
