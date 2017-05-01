@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <launch>
 
+  <!--  Publisch base frame and tool tip name for planner -->
+  <param name="ikfast_base_frame" type="string" value="base_link" />
+  <param name="ikfast_tool_frame" type="string" value="tool_tip" />
+
   <include file="$(find kr120_with_torch_moveit_config)/launch/descartes_pathplanning.launch"></include>
 
 </launch>

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 /*
- *  path_generation.h
+ *  path_generation.cpp
  *
  *  Created on: Feb 28, 2016
  *  Author: Bart and Jeroen

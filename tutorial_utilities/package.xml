@@ -44,10 +44,16 @@
   <build_depend>descartes_core</build_depend>
   <build_depend>descartes_trajectory</build_depend>
   <build_depend>trajectory_msgs</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>moveit_msgs</build_depend>
 
   <run_depend>descartes_core</run_depend>
   <run_depend>descartes_trajectory</run_depend>
   <run_depend>trajectory_msgs</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>moveit_msgs</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

@@ -12,11 +12,14 @@ catkin_package(
   INCLUDE_DIRS
     include
   LIBRARIES
-    tutorial_utilities_lib
+    tutorial_utilities
   CATKIN_DEPENDS
     descartes_core
     descartes_trajectory
     trajectory_msgs
+    moveit_msgs
+    std_msgs
+    moveit_ros_planning_interface
   DEPENDS
     eigen
 )
@@ -27,8 +30,9 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
-add_library(tutorial_utilities_lib
+add_library(tutorial_utilities
   src/path_generation.cpp
+  src/collision_object_utils.cpp
   src/visualization.cpp
 )
 
