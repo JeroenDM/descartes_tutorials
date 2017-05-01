@@ -30,7 +30,7 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
-add_library(tutorial_utilities
+add_library(tutorial_utilities_lib
   src/path_generation.cpp
   src/collision_object_utils.cpp
   src/visualization.cpp

@@ -26,6 +26,22 @@
 
  namespace tutorial_utilities 
  {
+	//Function for constructing quaternion starting from Euler rotations XYZ
+    Eigen::Quaternion<double> eulerToQuat(double rotX, double rotY, double rotZ)
+	{
+		Eigen::Matrix3d m;
+		m = Eigen::AngleAxisd(rotX, Eigen::Vector3d::UnitX())
+			* Eigen::AngleAxisd(rotY, Eigen::Vector3d::UnitY())
+			* Eigen::AngleAxisd(rotZ, Eigen::Vector3d::UnitZ());
+	
+		Eigen::AngleAxis<double> aa;
+		aa = Eigen::AngleAxisd(m);
+		
+		Eigen::Quaternion<double> quat;
+		quat = Eigen::Quaternion<double>(aa);
+		return quat;
+    }
+
     visualization_msgs::Marker createMarker(double transX, double transY, double transZ, double rotX, double rotY, double rotZ, 
                                             descartes_trajectory::AxialSymmetricPt::FreeAxis axis =
 																	            descartes_trajectory::AxialSymmetricPt::X_AXIS)
@@ -92,22 +108,6 @@
 										 rotationsXYZ[0], rotationsXYZ[1], rotationsXYZ[2], descartes_trajectory::AxialSymmetricPt::Y_AXIS));
 		markervec.push_back(createMarker(translations[0], translations[1], translations[2], 
 										 rotationsXYZ[0], rotationsXYZ[1], rotationsXYZ[2], descartes_trajectory::AxialSymmetricPt::Z_AXIS));
-    }
-
-    //Function for constructing quaternion starting from Euler rotations XYZ
-    Eigen::Quaternion<double> eulerToQuat(double rotX, double rotY, double rotZ)
-	{
-		Eigen::Matrix3d m;
-		m = Eigen::AngleAxisd(rotX, Eigen::Vector3d::UnitX())
-			* Eigen::AngleAxisd(rotY, Eigen::Vector3d::UnitY())
-			* Eigen::AngleAxisd(rotZ, Eigen::Vector3d::UnitZ());
-	
-		Eigen::AngleAxis<double> aa;
-		aa = Eigen::AngleAxisd(m);
-		
-		Eigen::Quaternion<double> quat;
-		quat = Eigen::Quaternion<double>(aa);
-		return quat;
     }
 
     visualization_msgs::MarkerArray createMarkerArray(std::vector<Eigen::Affine3d> poses)
