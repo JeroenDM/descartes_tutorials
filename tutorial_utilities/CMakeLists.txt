@@ -17,6 +17,9 @@ catkin_package(
     descartes_core
     descartes_trajectory
     trajectory_msgs
+    moveit_msgs
+    std_msgs
+    moveit_ros_planning_interface
   DEPENDS
     eigen
 )

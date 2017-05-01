@@ -26,15 +26,28 @@
 #define DESCARTES_COLLISION_OBJECT_UTILS_H
 
 #include <ros/ros.h>
+#include </usr/include/eigen3/Eigen/Geometry>
+#include <moveit_msgs/PlanningScene.h>
+#include <moveit_msgs/CollisionObject.h>
+#include <std_msgs/ColorRGBA.h>
+#include <geometric_shapes/shape_operations.h>
 
 namespace tutorial_utilities
 {
+    Eigen::Quaternion<double> eulerToQuat(double rotX, double rotY, double rotZ);
+    
     /**
     * Function to test library compilation
     */
     void testCollisionUtils();
 
-    //moveit_msgs::CollisionObject makeCollisionObject(std::string filepath, Eigen::Vector3d scale, std::string ID, Eigen::Affine3d pose);
+    moveit_msgs::CollisionObject makeCollisionObject(std::string filepath, Eigen::Vector3d scale, std::string ID, Eigen::Affine3d pose);
+
+	std_msgs::ColorRGBA makeColor(double r, double g, double b, double a);
+
+	moveit_msgs::ObjectColor makeObjectColor(std::string id, std_msgs::ColorRGBA color);
+
+	moveit_msgs::ObjectColor makeObjectColor(std::string id, double r, double g, double b, double a);
 }
 
 #endif

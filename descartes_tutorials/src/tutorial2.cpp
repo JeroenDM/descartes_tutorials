@@ -51,7 +51,33 @@ int main(int argc, char** argv)
   ros::AsyncSpinner spinner (1);
   spinner.start();
 
+  // 0. Add objects to planning scene
   tutorial_utilities::testCollisionUtils();
+    
+  double objectX, objectY, objectZ, objectrX, objectrY, objectrZ;
+  objectX = 0.8;
+  objectY = 0.0;
+  objectZ = 0.112;
+  objectrX = 0.0;
+  objectrY = 0.0;
+  objectrZ = 0.0;
+  Eigen::Affine3d objectpose;
+  objectpose = descartes_core::utils::toFrame(objectX, objectY, objectZ, objectrX, objectrY, objectrZ, descartes_core::utils::EulerConventions::XYZ);
+
+  moveit_msgs::PlanningScene planning_scene;
+  Eigen::Vector3d objectscale(0.001,0.001,0.001);
+  std::string workObjectID = "";
+  if (!nh.getParam("/workObjectID", workObjectID))
+  {
+    ROS_WARN_STREAM("workObjectID parameter not found, using default: " << workObjectID);
+  }
+  std::string workObjectMeshPath = "";
+  if (!nh.getParam("/workObjectPath", workObjectMeshPath))
+  {
+    ROS_WARN_STREAM("workObjectPath parameter not found, using default: " << workObjectMeshPath);
+  }
+  workObjectMeshPath = std::string("file://") + workObjectMeshPath;
+  planning_scene.world.collision_objects.push_back(tutorial_utilities::makeCollisionObject(workObjectMeshPath, objectscale, workObjectID, objectpose));
 
   // 1. Define sequence of points
   double x, y, z, rx, ry, rz;
@@ -89,6 +115,7 @@ int main(int argc, char** argv)
   const std::string world_frame = "base_link";
 
   // tool center point frame (name of link associated with tool)
+  // this is also updated in the launch file of the robot
   const std::string tcp_frame = "tool_tip";
 
   if (!model->initialize(robot_description, group_name, world_frame, tcp_frame))
