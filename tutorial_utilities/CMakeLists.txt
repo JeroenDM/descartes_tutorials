@@ -4,7 +4,9 @@ project(tutorial_utilities)
 ## Add support for C++11, supported in ROS Kinetic and newer
 add_definitions(-std=c++11)
 
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  moveit_ros_planning_interface
+)
 
 catkin_package(
   INCLUDE_DIRS
