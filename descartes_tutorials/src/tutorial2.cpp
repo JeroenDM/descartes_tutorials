@@ -14,6 +14,7 @@
 #include <descartes_planner/dense_planner.h>
 
 #include <tutorial_utilities/path_generation.h>
+//#include <tutorial_utilities/visualization.h>
 
 
 typedef std::vector<descartes_core::TrajectoryPtPtr> TrajectoryVec;

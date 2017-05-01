@@ -5,14 +5,14 @@ project(tutorial_utilities)
 add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-  moveit_ros_planning_interface
+  descartes_trajectory
 )
 
 catkin_package(
   INCLUDE_DIRS
     include
   LIBRARIES
-    tutorial_utilities
+    tutorial_utilities_lib
   CATKIN_DEPENDS
     descartes_core
     descartes_trajectory
@@ -27,20 +27,21 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
-add_library(tutorial_utilities
+add_library(tutorial_utilities_lib
   src/path_generation.cpp
+  src/visualization.cpp
 )
 
-add_dependencies(${PROJECT_NAME} 
+add_dependencies(tutorial_utilities_lib
   ${catkin_EXPORTED_TARGETS}
 )
 
-target_link_libraries(${PROJECT_NAME}
-  tutorial_utilities
-  ${catkin_LIBRARIES}
-)
+#target_link_libraries(${PROJECT_NAME}
+#  tutorial_utilities_lib
+#  ${catkin_LIBRARIES}
+#)
 
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME}_lib
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -48,5 +49,5 @@ install(TARGETS ${PROJECT_NAME}
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  #FILES_MATCHING PATTERN "*.h"
+  FILES_MATCHING PATTERN "*.h"
 )

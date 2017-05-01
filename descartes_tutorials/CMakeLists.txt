@@ -6,8 +6,9 @@ find_package(catkin REQUIRED COMPONENTS
   descartes_moveit
   descartes_trajectory
   descartes_planner
-  tutorial_utilities
+  tutorial_utilities REQUIRED
   trajectory_msgs
+  moveit_ros_planning_interface
 )
 
 catkin_package()
@@ -15,9 +16,9 @@ catkin_package()
 ###########
 ## Build ##
 ###########
-
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${tutorial_utilities_INCLUDE_DIRS}
 )
 
 add_executable(${PROJECT_NAME}_tutorial1 src/tutorial1.cpp)
