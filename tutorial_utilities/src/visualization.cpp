@@ -64,19 +64,19 @@
 		Eigen::Quaternion<double> quat;
 		if(axis == descartes_trajectory::AxialSymmetricPt::X_AXIS)
 		{
-			quat = eulerToQuat(rotX, rotY, rotZ);
+			quat = tutorial_utilities::eulerToQuat(rotX, rotY, rotZ);
 			marker.color.r = 1.0;
 			marker.color.g = 0.0;
 			marker.color.b = 0.0;
 		} else if(axis == descartes_trajectory::AxialSymmetricPt::Y_AXIS)
 		{
-			quat = eulerToQuat(rotX, rotY, rotZ) * eulerToQuat(0, 0, M_PI / 2);
+			quat = tutorial_utilities::eulerToQuat(rotX, rotY, rotZ) * tutorial_utilities::eulerToQuat(0, 0, M_PI / 2);
 			marker.color.r = 0.0;
 			marker.color.g = 1.0;
 			marker.color.b = 0.0;
 		} else if(axis == descartes_trajectory::AxialSymmetricPt::Z_AXIS)
 		{
-			quat = eulerToQuat(rotX, rotY, rotZ) * eulerToQuat(0, 3 * (M_PI / 2), 0);
+			quat = tutorial_utilities::eulerToQuat(rotX, rotY, rotZ) * tutorial_utilities::eulerToQuat(0, 3 * (M_PI / 2), 0);
 			marker.color.r = 0.0;
 			marker.color.g = 0.0;
 			marker.color.b = 1.0;

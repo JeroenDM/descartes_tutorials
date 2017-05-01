@@ -33,6 +33,7 @@
 // Includes the descartes trajectory type we will be using
 #include <descartes_trajectory/axial_symmetric_pt.h>
 
+namespace tutorial_utilities {
 //Function for constructing quaternion starting from Euler rotations XYZ
 Eigen::Quaternion<double> eulerToQuat(double rotX, double rotY, double rotZ);
 
@@ -42,5 +43,6 @@ visualization_msgs::Marker createMarker(double transX, double transY, double tra
 void createVisualFrame(Eigen::Affine3d pose, std::vector<visualization_msgs::Marker> & markervec);
 
 visualization_msgs::MarkerArray createMarkerArray(std::vector<Eigen::Affine3d> poses);
+}
 
 #endif
