@@ -30,13 +30,13 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
-add_library(tutorial_utilities_lib
+add_library(tutorial_utilities
   src/path_generation.cpp
   src/collision_object_utils.cpp
   src/visualization.cpp
 )
 
-add_dependencies(tutorial_utilities_lib
+add_dependencies(tutorial_utilities
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -45,7 +45,7 @@ add_dependencies(tutorial_utilities_lib
 #  ${catkin_LIBRARIES}
 #)
 
-install(TARGETS ${PROJECT_NAME}_lib
+install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

@@ -27,7 +27,7 @@
  namespace tutorial_utilities 
  {
 	//Function for constructing quaternion starting from Euler rotations XYZ
-    Eigen::Quaternion<double> eulerToQuat(double rotX, double rotY, double rotZ)
+    /*Eigen::Quaternion<double> eulerToQuat(double rotX, double rotY, double rotZ)
 	{
 		Eigen::Matrix3d m;
 		m = Eigen::AngleAxisd(rotX, Eigen::Vector3d::UnitX())
@@ -40,7 +40,7 @@
 		Eigen::Quaternion<double> quat;
 		quat = Eigen::Quaternion<double>(aa);
 		return quat;
-    }
+    }*/
 
     visualization_msgs::Marker createMarker(double transX, double transY, double transZ, double rotX, double rotY, double rotZ, 
                                             descartes_trajectory::AxialSymmetricPt::FreeAxis axis =
