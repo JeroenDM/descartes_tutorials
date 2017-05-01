@@ -77,7 +77,7 @@ int main(int argc, char** argv)
     ROS_WARN_STREAM("workObjectPath parameter not found, using default: " << workObjectMeshPath);
   }
   workObjectMeshPath = std::string("file://") + workObjectMeshPath;
-  // planning_scene.world.collision_objects.push_back(tutorial_utilities::makeCollisionObject(workObjectMeshPath, objectscale, workObjectID, objectpose));
+  planning_scene.world.collision_objects.push_back(tutorial_utilities::makeCollisionObject(workObjectMeshPath, objectscale, workObjectID, objectpose));
 
   // 1. Define sequence of points
   double x, y, z, rx, ry, rz;
