@@ -7,7 +7,7 @@ For our first contribution, we avoided changes things in the descartes core pack
 ## What we want to show in the tutorial
 
 - Visualization of a trajectory.
-- Adding collision objects.
+- Adding collision objects. (Should this be in a seperate cpp executable, same launch file?)
 - To little trajectory points -> collision not detected (9 points for this example).
 - (custom cost function)
 
