@@ -15,7 +15,11 @@
 
 #include <tutorial_utilities/path_generation.h>
 #include <tutorial_utilities/collision_object_utils.h>
-//#include <tutorial_utilities/visualization.h>
+#include <tutorial_utilities/visualization.h>
+
+// Include the visualisation message that will be used to
+// visualize the trajectory points in RViz
+#include <visualization_msgs/MarkerArray.h>
 
 typedef std::vector<descartes_core::TrajectoryPtPtr> TrajectoryVec;
 typedef TrajectoryVec::const_iterator TrajectoryIter;
@@ -126,6 +130,26 @@ int main(int argc, char** argv)
     descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i]);
     points.push_back(pt);
   }
+
+  // Visualize the trajectory points in RViz
+  // Transform the generated poses into a markerArray message that can be visualized by RViz
+  visualization_msgs::MarkerArray ma;
+  ma = tutorial_utilities::createMarkerArray(poses);
+  // Start the publisher for the Rviz Markers
+  ros::Publisher vis_pub = nh.advertise<visualization_msgs::MarkerArray>( "visualization_marker_array", 1 );
+
+  // Wait for subscriber and publish the markerArray once the subscriber is found.
+  ROS_INFO("Waiting for marker subscribers.");
+  if(waitForSubscribers(vis_pub, ros::Duration(2.0)))
+  {
+    ROS_INFO("Subscriber found, publishing markers.");
+    vis_pub.publish(ma);
+    ros::spinOnce();
+    loop_rate.sleep();
+  } else {
+    ROS_ERROR("No subscribers connected, markers not published");
+  }
+
 
   // 2. Create a robot model and initialize it
   descartes_core::RobotModelPtr model (new descartes_moveit::IkFastMoveitStateAdapter);
