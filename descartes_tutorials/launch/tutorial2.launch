@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-  <param name="workObjectPath" value="$(find descartes_tutorials)/meshes/l_profile.dae"/>
+  <param name="workObjectPath" value="$(find descartes_tutorials)/meshes/profile.stl"/>
   <param name="workObjectID" value="l_profile"/>
   <node name="tutorial2" pkg="descartes_tutorials" type="tutorial2" output="screen" />
   

@@ -41,6 +41,8 @@ toROSJointTrajectory(const TrajectoryVec& trajectory, const descartes_core::Robo
  */
 bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory);
 
+bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout);
+
 int main(int argc, char** argv)
 {
   // Initialize ROS
@@ -77,7 +79,27 @@ int main(int argc, char** argv)
     ROS_WARN_STREAM("workObjectPath parameter not found, using default: " << workObjectMeshPath);
   }
   workObjectMeshPath = std::string("file://") + workObjectMeshPath;
-  planning_scene.world.collision_objects.push_back(tutorial_utilities::makeCollisionObject(workObjectMeshPath, objectscale, workObjectID, objectpose));
+  planning_scene.world.collision_objects.push_back(
+    tutorial_utilities::makeCollisionObject(workObjectMeshPath, objectscale, workObjectID, objectpose)
+  );
+  planning_scene.object_colors.push_back(tutorial_utilities::makeObjectColor(workObjectID, 0.5, 0.5, 0.5, 1.0));
+
+  ros::Publisher planning_scene_diff_publisher;
+  planning_scene_diff_publisher = nh.advertise<moveit_msgs::PlanningScene>("planning_scene", 1);
+
+  planning_scene.is_diff = true;
+
+  ros::Rate loop_rate(10);
+  ROS_INFO("Waiting for planning_scene subscriber.");
+  if(waitForSubscribers(planning_scene_diff_publisher, ros::Duration(2.0)))
+  {
+	  planning_scene_diff_publisher.publish(planning_scene);
+	  ros::spinOnce();
+	  loop_rate.sleep();
+    ROS_INFO("Object added to the world.");
+  } else {
+    ROS_ERROR("No subscribers connected, collision object not added");
+  }
 
   // 1. Define sequence of points
   double x, y, z, rx, ry, rz;
@@ -241,4 +263,19 @@ bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory)
     ROS_WARN("Action server could not execute trajectory");
     return false;
   }
+}
+
+//Waits for a subscriber to subscribe to a publisher
+bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout)
+{
+    if(pub.getNumSubscribers() > 0)
+        return true;
+    ros::Time start = ros::Time::now();
+    ros::Rate waitTime(0.5);
+    while(ros::Time::now() - start < timeout) {
+        waitTime.sleep();
+        if(pub.getNumSubscribers() > 0)
+            break;
+    }
+    return pub.getNumSubscribers() > 0;
 }
