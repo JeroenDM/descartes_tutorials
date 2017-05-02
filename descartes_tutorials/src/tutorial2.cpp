@@ -28,6 +28,8 @@ descartes_core::TrajectoryPtPtr makeCartesianPoint(const Eigen::Affine3d& pose);
  * Generates a cartesian point with free rotation about the Z axis of the EFF frame
  */
 descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(const Eigen::Affine3d& pose);
+descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(	Eigen::Affine3d pose,
+																						double rxTolerance, double ryTolerance, double rzTolerance);
 
 /**
  * Translates a descartes trajectory to a ROS joint trajectory
@@ -202,6 +204,26 @@ descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(const Eigen::Affine
   using namespace descartes_trajectory;
   return TrajectoryPtPtr( new AxialSymmetricPt(pose, M_PI/2.0-0.0001, AxialSymmetricPt::Z_AXIS) );
 }
+
+	descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(	Eigen::Affine3d pose,
+																						double rxTolerance, double ryTolerance, double rzTolerance)
+	{
+		using namespace descartes_core;
+		using namespace descartes_trajectory;
+
+    double rotStepSize = M_PI/180;
+
+		Eigen::Vector3d translations;
+		translations = pose.translation();
+		Eigen::Vector3d eulerXYZ;
+		eulerXYZ = pose.rotation().eulerAngles(0,1,2);
+
+		PositionTolerance p;
+		p = ToleranceBase::zeroTolerance<PositionTolerance>(translations(0), translations(1), translations(2));
+		OrientationTolerance o;
+		o = ToleranceBase::createSymmetric<OrientationTolerance>(eulerXYZ(0), eulerXYZ(1), eulerXYZ(2), rxTolerance, ryTolerance, rzTolerance);
+		return TrajectoryPtPtr( new CartTrajectoryPt( TolerancedFrame(pose, p, o), 0.0, rotStepSize) );
+	}
 
 trajectory_msgs::JointTrajectory
 toROSJointTrajectory(const TrajectoryVec& trajectory,
