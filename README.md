@@ -10,6 +10,8 @@ For our first contribution, we avoided changes things in the descartes core pack
 - Adding collision objects.
 - (custom cost function)
 
+Originaly many of the parameters could be changed in the launch file. For simplicity this is left out in this tutorial at the moment.
+
 Reminders
 - Function to convert eigen pose to orientation toleranced point.
 - rviz config has to be adapted
