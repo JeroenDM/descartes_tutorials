@@ -49,6 +49,10 @@ bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory);
 
 bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout);
 
+void addWeldingObject(moveit_msgs::PlanningScene& planningScene);
+
+void addTable(moveit_msgs::PlanningScene& planningScene);
+
 int main(int argc, char** argv)
 {
   // Initialize ROS
@@ -59,47 +63,23 @@ int main(int argc, char** argv)
   ros::AsyncSpinner spinner (1);
   spinner.start();
 
+  ros::Rate loop_rate(10);
+
   // 0. Add objects to planning scene
-  tutorial_utilities::testCollisionUtils();
-    
-  double objectX, objectY, objectZ, objectrX, objectrY, objectrZ;
-  objectX = 1.0;
-  objectY = 0.0;
-  objectZ = 0.0;
-  objectrX = 0.0;
-  objectrY = 0.0;
-  objectrZ = M_PI_2;
-  Eigen::Affine3d objectpose;
-  objectpose = descartes_core::utils::toFrame(objectX, objectY, objectZ, objectrX, objectrY, objectrZ, descartes_core::utils::EulerConventions::XYZ);
-
   moveit_msgs::PlanningScene planning_scene;
-  Eigen::Vector3d objectscale(0.001,0.001,0.001);
-  std::string workObjectID = "";
-  if (!nh.getParam("/workObjectID", workObjectID))
-  {
-    ROS_WARN_STREAM("workObjectID parameter not found, using default: " << workObjectID);
-  }
-  std::string workObjectMeshPath = "";
-  if (!nh.getParam("/workObjectPath", workObjectMeshPath))
-  {
-    ROS_WARN_STREAM("workObjectPath parameter not found, using default: " << workObjectMeshPath);
-  }
-  workObjectMeshPath = std::string("file://") + workObjectMeshPath;
-  planning_scene.world.collision_objects.push_back(
-    tutorial_utilities::makeCollisionObject(workObjectMeshPath, objectscale, workObjectID, objectpose)
-  );
-  planning_scene.object_colors.push_back(tutorial_utilities::makeObjectColor(workObjectID, 0.5, 0.5, 0.5, 1.0));
+  
+  addTable(planning_scene);
+  addWeldingObject(planning_scene);
 
-  ros::Publisher planning_scene_diff_publisher;
-  planning_scene_diff_publisher = nh.advertise<moveit_msgs::PlanningScene>("planning_scene", 1);
+  ros::Publisher scene_diff_publisher;
+  scene_diff_publisher = nh.advertise<moveit_msgs::PlanningScene>("planning_scene", 1);
 
   planning_scene.is_diff = true;
 
-  ros::Rate loop_rate(10);
   ROS_INFO("Waiting for planning_scene subscriber.");
-  if(waitForSubscribers(planning_scene_diff_publisher, ros::Duration(2.0)))
+  if(waitForSubscribers(scene_diff_publisher, ros::Duration(2.0)))
   {
-	  planning_scene_diff_publisher.publish(planning_scene);
+	  scene_diff_publisher.publish(planning_scene);
 	  ros::spinOnce();
 	  loop_rate.sleep();
     ROS_INFO("Object added to the world.");
@@ -109,14 +89,14 @@ int main(int argc, char** argv)
 
   // 1. Define sequence of points
   double x, y, z, rx, ry, rz;
-  x = 1.0 - 0.025;
+  x = 2.0 - 0.025;
   y = 0.0;
   z = 0.008 + 0.025;
   rx = 0.0;
   ry = (M_PI / 2) + M_PI/4;
   rz = 0.0;
   TrajectoryVec points;
-  int N_points = 30;
+  int N_points = 9;
 
   std::vector<Eigen::Affine3d> poses;
   Eigen::Affine3d startPose;
@@ -127,7 +107,7 @@ int main(int argc, char** argv)
 
   for (unsigned int i = 0; i < N_points; ++i)
   {
-    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i]);
+    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i], 0.0, 0.4, M_PI);
     points.push_back(pt);
   }
 
@@ -235,7 +215,7 @@ descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(const Eigen::Affine
 		using namespace descartes_core;
 		using namespace descartes_trajectory;
 
-    double rotStepSize = M_PI/180;
+    double rotStepSize = 0.1; //M_PI/180;
 
 		Eigen::Vector3d translations;
 		translations = pose.translation();
@@ -328,4 +308,27 @@ bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout)
             break;
     }
     return pub.getNumSubscribers() > 0;
+}
+
+void addWeldingObject(moveit_msgs::PlanningScene& scene)
+{
+  Eigen::Vector3d scale(0.001,0.001,0.001);
+  Eigen::Affine3d pose;
+  pose = descartes_core::utils::toFrame( 2.0, 0.0, 0.012, 0.0, 0.0, M_PI_2, descartes_core::utils::EulerConventions::XYZ);
+  //ros::package::getPath('descartes_tutorials')
+  scene.world.collision_objects.push_back(
+    tutorial_utilities::makeCollisionObject("package://descartes_tutorials/meshes/profile.stl", scale, "Profile", pose)
+    );
+  scene.object_colors.push_back(tutorial_utilities::makeObjectColor("Profile", 0.5, 0.5, 0.5, 1.0));
+}
+
+void addTable(moveit_msgs::PlanningScene& scene)
+{
+  Eigen::Vector3d scale(1.0,1.0,1.0);
+  Eigen::Affine3d pose;
+  pose = descartes_core::utils::toFrame(1.5, -0.6, 0.0, 0.0, 0.0, 0.0, descartes_core::utils::EulerConventions::XYZ);
+  scene.world.collision_objects.push_back(
+    tutorial_utilities::makeCollisionObject("package://descartes_tutorials/meshes/table.stl", scale, "Table", pose)
+    );
+  scene.object_colors.push_back(tutorial_utilities::makeObjectColor("Table", 0.2, 0.2, 0.2, 1.0));
 }
