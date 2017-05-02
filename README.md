@@ -8,6 +8,7 @@ For our first contribution, we avoided changes things in the descartes core pack
 
 - Visualization of a trajectory.
 - Adding collision objects.
+- To little trajectory points -> collision not detected (9 points for this example).
 - (custom cost function)
 
 Originaly many of the parameters could be changed in the launch file. For simplicity this is left out in this tutorial at the moment.
