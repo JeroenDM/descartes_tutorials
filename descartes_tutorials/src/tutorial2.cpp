@@ -57,7 +57,7 @@ int main(int argc, char** argv)
   tutorial_utilities::testCollisionUtils();
     
   double objectX, objectY, objectZ, objectrX, objectrY, objectrZ;
-  objectX = 0.8;
+  objectX = 1.0;
   objectY = 0.0;
   objectZ = 0.0;
   objectrX = 0.0;
@@ -103,22 +103,23 @@ int main(int argc, char** argv)
 
   // 1. Define sequence of points
   double x, y, z, rx, ry, rz;
-  x = 0.8 - 0.025;
+  x = 1.0 - 0.025;
   y = 0.0;
   z = 0.008 + 0.025;
   rx = 0.0;
   ry = (M_PI / 2) + M_PI/4;
   rz = 0.0;
   TrajectoryVec points;
+  int N_points = 30;
 
   std::vector<Eigen::Affine3d> poses;
   Eigen::Affine3d startPose;
   Eigen::Affine3d endPose;
   startPose = descartes_core::utils::toFrame(x, y, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
   endPose = descartes_core::utils::toFrame(x, y + 0.4, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
-  poses = tutorial_utilities::line(startPose, endPose, 9);
+  poses = tutorial_utilities::line(startPose, endPose, N_points);
 
-  for (unsigned int i = 0; i < 9; ++i)
+  for (unsigned int i = 0; i < N_points; ++i)
   {
     descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i]);
     points.push_back(pt);
@@ -126,6 +127,9 @@ int main(int argc, char** argv)
 
   // 2. Create a robot model and initialize it
   descartes_core::RobotModelPtr model (new descartes_moveit::IkFastMoveitStateAdapter);
+
+  //Enable collision checking
+  model->setCheckCollisions(true);
 
   // Name of description on parameter server. Typically just "robot_description".
   const std::string robot_description = "robot_description";
