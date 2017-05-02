@@ -59,10 +59,10 @@ int main(int argc, char** argv)
   double objectX, objectY, objectZ, objectrX, objectrY, objectrZ;
   objectX = 0.8;
   objectY = 0.0;
-  objectZ = 0.112;
+  objectZ = 0.0;
   objectrX = 0.0;
   objectrY = 0.0;
-  objectrZ = 0.0;
+  objectrZ = M_PI_2;
   Eigen::Affine3d objectpose;
   objectpose = descartes_core::utils::toFrame(objectX, objectY, objectZ, objectrX, objectrY, objectrZ, descartes_core::utils::EulerConventions::XYZ);
 
@@ -103,12 +103,12 @@ int main(int argc, char** argv)
 
   // 1. Define sequence of points
   double x, y, z, rx, ry, rz;
-  x = 0.8;
-  y = 0.0 + 0.025;
-  z = 0.112 + 0.025;
-  rx = (M_PI / 2) + M_PI/4;
-  ry = 0.0;
-  rz = -M_PI/2;
+  x = 0.8 - 0.025;
+  y = 0.0;
+  z = 0.008 + 0.025;
+  rx = 0.0;
+  ry = (M_PI / 2) + M_PI/4;
+  rz = 0.0;
   TrajectoryVec points;
 
   std::vector<Eigen::Affine3d> poses;
