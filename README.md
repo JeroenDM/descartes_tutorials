@@ -11,11 +11,8 @@ For our first contribution, we avoided changes things in the descartes core pack
 - To little trajectory points -> collision not detected (9 points for this example).
 - (custom cost function)
 
+**Important:** for the collision objects part, some lines of code are added in the descartes source code which can be found [here](https://github.com/JeroenDM/descartes/commits/welding_tutorial).
 Originaly many of the parameters could be changed in the launch file. For simplicity this is left out in this tutorial at the moment.
-
-Reminders
-- Function to convert eigen pose to orientation toleranced point.
-- rviz config has to be adapted
 
 ## What we would like to improve
 
