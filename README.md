@@ -1,6 +1,6 @@
 # Descartes welding example
 
-We implemented an example of path planning for a welding robot. The original code is written [Bart's repository](https://github.com/Bart123456/lasrobot_ws). It was in serious need of cleaning and refactoring, therefore we started from scratch in this repository, which is a fork of the original code.
+We implemented an example of path planning for a welding robot. We started from the tutorial1.cpp file and added new code and used a different robot. The original code is written [Bart's repository](https://github.com/Bart123456/lasrobot_ws). It was in serious need of cleaning and refactoring, therefore we started from scratch in this repository, which is a fork of the original code.
 
 For our first contribution, we avoided changes things in the descartes core package. However, to include collision avoidance we had to make a small change to the moveit_state_adapter and the robot_model.
 
