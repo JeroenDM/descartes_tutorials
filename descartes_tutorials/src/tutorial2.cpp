@@ -47,12 +47,26 @@ toROSJointTrajectory(const TrajectoryVec& trajectory, const descartes_core::Robo
  */
 bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory);
 
+/**
+ * Waits for a subscriber to subscribe to a publisher
+ */
 bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout);
 
+/**
+ * Add the welding object (l-profile) to the planning scene.
+ * This is put in a function to keep the tutorial more readable.
+ */
 void addWeldingObject(moveit_msgs::PlanningScene& planningScene);
 
+/**
+ * Add the welding table to the planning scene.
+ * This is put in a function to keep the tutorial more readable.
+ */
 void addTable(moveit_msgs::PlanningScene& planningScene);
 
+/**********************
+  ** MAIN LOOP
+**********************/
 int main(int argc, char** argv)
 {
   // Initialize ROS
@@ -295,7 +309,6 @@ bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory)
   }
 }
 
-//Waits for a subscriber to subscribe to a publisher
 bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout)
 {
     if(pub.getNumSubscribers() > 0)
