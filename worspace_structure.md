@@ -26,4 +26,6 @@ descartes_ws/
     - [motoman_robot/](https://github.com/ros-industrial/motoman)
       - motoman_sia20d_support/
       - motoman_sia20d_moveit_config/
+    - [kuka_experimental](https://github.com/ros-industrial/kuka_experimental)
+    - [industrial_core](https://github.com/ros-industrial/industrial_core)
     - CMakeLists.txt
