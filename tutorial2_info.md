@@ -9,7 +9,7 @@ For our first contribution, we avoided changes things in the descartes core pack
 - To little trajectory points -> collision not detected (9 points for this example).
 - (custom cost function)
 
-**Important:** for the collision objects part, some lines of code are added in the descartes source code which can be found [here](https://github.com/JeroenDM/descartes/commits/welding_tutorial).
+**Important:** for the collision objects part, some lines of code are added in the descartes source code which can be found [here](https://github.com/JeroenDM/descartes/commit/4f4311c969dcf1ad64539679cac35a5e7c5060a2).
 Originaly many of the parameters could be changed in the launch file. For simplicity this is left out in this tutorial at the moment.
     
  # Detailed planning of functions to add
