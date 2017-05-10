@@ -7,7 +7,7 @@ This tutorial will discuss: adding collision objects, visualizing trajectory poi
 ## Installation
 
 We still have to fix dependency issues, so installing can be difficult.
-Our current approach is to add all packages listed here to your [workspace](http://wiki.ros.org/catkin/Tutorials/create_a_workspace).
+Our current approach is to add all packages listed [here](https://github.com/JeroenDM/descartes_tutorials/blob/f692aeea18ae43eb451e67d006aca0808fefbf1f/worspace_structure.md) to your [workspace](http://wiki.ros.org/catkin/Tutorials/create_a_workspace).
 
 ## How to launch?
 
