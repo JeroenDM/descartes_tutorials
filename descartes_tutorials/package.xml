@@ -24,6 +24,7 @@
   <run_depend>motoman_sia20d_support</run_depend>
   <run_depend>motoman_sia20d_moveit_config</run_depend>
   <run_depend>kuka_kr120_support</run_depend>
+  <run_depend>kr120_with_torch_ikfast</run_depend>
   <run_depend>industrial_robot_simulator</run_depend>
   <run_depend>descartes_core</run_depend>
   <run_depend>descartes_moveit</run_depend>
