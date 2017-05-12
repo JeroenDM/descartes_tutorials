@@ -27,61 +27,61 @@ typedef TrajectoryVec::const_iterator TrajectoryIter;
 /**
  * Generates an completely defined (zero-tolerance) cartesian point from a pose
  */
-descartes_core::TrajectoryPtPtr makeCartesianPoint(const Eigen::Affine3d& pose);
+descartes_core::TrajectoryPtPtr makeCartesianPoint(const Eigen::Affine3d &pose);
 /**
  * Generates a cartesian point with free rotation about the Z axis of the EFF frame
  */
-descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(const Eigen::Affine3d& pose);
-descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(	Eigen::Affine3d pose,
-																						double rxTolerance, double ryTolerance, double rzTolerance);
+descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(const Eigen::Affine3d &pose);
+descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(Eigen::Affine3d pose,
+                                                             double rxTolerance, double ryTolerance, double rzTolerance);
 
 /**
  * Translates a descartes trajectory to a ROS joint trajectory
  */
 trajectory_msgs::JointTrajectory
-toROSJointTrajectory(const TrajectoryVec& trajectory, const descartes_core::RobotModel& model,
-                     const std::vector<std::string>& joint_names, double time_delay);
+toROSJointTrajectory(const TrajectoryVec &trajectory, const descartes_core::RobotModel &model,
+                     const std::vector<std::string> &joint_names, double time_delay);
 
 /**
  * Sends a ROS trajectory to the robot controller
  */
-bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory);
+bool executeTrajectory(const trajectory_msgs::JointTrajectory &trajectory);
 
 /**
  * Waits for a subscriber to subscribe to a publisher
  */
-bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout);
+bool waitForSubscribers(ros::Publisher &pub, ros::Duration timeout);
 
 /**
  * Add the welding object (l-profile) to the planning scene.
  * This is put in a function to keep the tutorial more readable.
  */
-void addWeldingObject(moveit_msgs::PlanningScene& planningScene);
+void addWeldingObject(moveit_msgs::PlanningScene &planningScene);
 
 /**
  * Add the welding table to the planning scene.
  * This is put in a function to keep the tutorial more readable.
  */
-void addTable(moveit_msgs::PlanningScene& planningScene);
+void addTable(moveit_msgs::PlanningScene &planningScene);
 
 /**********************
   ** MAIN LOOP
 **********************/
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   // Initialize ROS
   ros::init(argc, argv, "descartes_tutorial");
   ros::NodeHandle nh;
 
   // Required for communication with moveit components
-  ros::AsyncSpinner spinner (1);
+  ros::AsyncSpinner spinner(1);
   spinner.start();
 
   ros::Rate loop_rate(10);
 
   // 0. Add objects to planning scene
   moveit_msgs::PlanningScene planning_scene;
-  
+
   addTable(planning_scene);
   addWeldingObject(planning_scene);
 
@@ -91,13 +91,15 @@ int main(int argc, char** argv)
   planning_scene.is_diff = true;
 
   ROS_INFO("Waiting for planning_scene subscriber.");
-  if(waitForSubscribers(scene_diff_publisher, ros::Duration(2.0)))
+  if (waitForSubscribers(scene_diff_publisher, ros::Duration(2.0)))
   {
-	  scene_diff_publisher.publish(planning_scene);
-	  ros::spinOnce();
-	  loop_rate.sleep();
+    scene_diff_publisher.publish(planning_scene);
+    ros::spinOnce();
+    loop_rate.sleep();
     ROS_INFO("Object added to the world.");
-  } else {
+  }
+  else
+  {
     ROS_ERROR("No subscribers connected, collision object not added");
   }
 
@@ -107,7 +109,7 @@ int main(int argc, char** argv)
   y = 0.0;
   z = 0.008 + 0.025;
   rx = 0.0;
-  ry = (M_PI / 2) + M_PI/4;
+  ry = (M_PI / 2) + M_PI / 4;
   rz = 0.0;
   TrajectoryVec points;
   int N_points = 9;
@@ -130,23 +132,24 @@ int main(int argc, char** argv)
   visualization_msgs::MarkerArray ma;
   ma = tutorial_utilities::createMarkerArray(poses);
   // Start the publisher for the Rviz Markers
-  ros::Publisher vis_pub = nh.advertise<visualization_msgs::MarkerArray>( "visualization_marker_array", 1 );
+  ros::Publisher vis_pub = nh.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
 
   // Wait for subscriber and publish the markerArray once the subscriber is found.
   ROS_INFO("Waiting for marker subscribers.");
-  if(waitForSubscribers(vis_pub, ros::Duration(2.0)))
+  if (waitForSubscribers(vis_pub, ros::Duration(2.0)))
   {
     ROS_INFO("Subscriber found, publishing markers.");
     vis_pub.publish(ma);
     ros::spinOnce();
     loop_rate.sleep();
-  } else {
+  }
+  else
+  {
     ROS_ERROR("No subscribers connected, markers not published");
   }
 
-
   // 2. Create a robot model and initialize it
-  descartes_core::RobotModelPtr model (new descartes_moveit::IkFastMoveitStateAdapter);
+  descartes_core::RobotModelPtr model(new descartes_moveit::IkFastMoveitStateAdapter);
 
   //Enable collision checking
   model->setCheckCollisions(true);
@@ -208,45 +211,45 @@ int main(int argc, char** argv)
   return 0;
 }
 
-descartes_core::TrajectoryPtPtr makeCartesianPoint(const Eigen::Affine3d& pose)
+descartes_core::TrajectoryPtPtr makeCartesianPoint(const Eigen::Affine3d &pose)
 {
   using namespace descartes_core;
   using namespace descartes_trajectory;
 
-  return TrajectoryPtPtr( new CartTrajectoryPt( TolerancedFrame(pose)) );
+  return TrajectoryPtPtr(new CartTrajectoryPt(TolerancedFrame(pose)));
 }
 
-descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(const Eigen::Affine3d& pose)
+descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(const Eigen::Affine3d &pose)
 {
   using namespace descartes_core;
   using namespace descartes_trajectory;
-  return TrajectoryPtPtr( new AxialSymmetricPt(pose, M_PI/2.0-0.0001, AxialSymmetricPt::Z_AXIS) );
+  return TrajectoryPtPtr(new AxialSymmetricPt(pose, M_PI / 2.0 - 0.0001, AxialSymmetricPt::Z_AXIS));
 }
 
-	descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(	Eigen::Affine3d pose,
-																						double rxTolerance, double ryTolerance, double rzTolerance)
-	{
-		using namespace descartes_core;
-		using namespace descartes_trajectory;
+descartes_core::TrajectoryPtPtr makeTolerancedCartesianPoint(Eigen::Affine3d pose,
+                                                             double rxTolerance, double ryTolerance, double rzTolerance)
+{
+  using namespace descartes_core;
+  using namespace descartes_trajectory;
 
-    double rotStepSize = 0.1; //M_PI/180;
+  double rotStepSize = 0.1; //M_PI/180;
 
-		Eigen::Vector3d translations;
-		translations = pose.translation();
-		Eigen::Vector3d eulerXYZ;
-		eulerXYZ = pose.rotation().eulerAngles(0,1,2);
+  Eigen::Vector3d translations;
+  translations = pose.translation();
+  Eigen::Vector3d eulerXYZ;
+  eulerXYZ = pose.rotation().eulerAngles(0, 1, 2);
 
-		PositionTolerance p;
-		p = ToleranceBase::zeroTolerance<PositionTolerance>(translations(0), translations(1), translations(2));
-		OrientationTolerance o;
-		o = ToleranceBase::createSymmetric<OrientationTolerance>(eulerXYZ(0), eulerXYZ(1), eulerXYZ(2), rxTolerance, ryTolerance, rzTolerance);
-		return TrajectoryPtPtr( new CartTrajectoryPt( TolerancedFrame(pose, p, o), 0.0, rotStepSize) );
-	}
+  PositionTolerance p;
+  p = ToleranceBase::zeroTolerance<PositionTolerance>(translations(0), translations(1), translations(2));
+  OrientationTolerance o;
+  o = ToleranceBase::createSymmetric<OrientationTolerance>(eulerXYZ(0), eulerXYZ(1), eulerXYZ(2), rxTolerance, ryTolerance, rzTolerance);
+  return TrajectoryPtPtr(new CartTrajectoryPt(TolerancedFrame(pose, p, o), 0.0, rotStepSize));
+}
 
 trajectory_msgs::JointTrajectory
-toROSJointTrajectory(const TrajectoryVec& trajectory,
-                     const descartes_core::RobotModel& model,
-                     const std::vector<std::string>& joint_names,
+toROSJointTrajectory(const TrajectoryVec &trajectory,
+                     const descartes_core::RobotModel &model,
+                     const std::vector<std::string> &joint_names,
                      double time_delay)
 {
   // Fill out information about our trajectory
@@ -283,7 +286,7 @@ toROSJointTrajectory(const TrajectoryVec& trajectory,
   return result;
 }
 
-bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory)
+bool executeTrajectory(const trajectory_msgs::JointTrajectory &trajectory)
 {
   // Create a Follow Joint Trajectory Action Client
   actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> ac("joint_trajectory_action", true);
@@ -296,52 +299,53 @@ bool executeTrajectory(const trajectory_msgs::JointTrajectory& trajectory)
   control_msgs::FollowJointTrajectoryGoal goal;
   goal.trajectory = trajectory;
   goal.goal_time_tolerance = ros::Duration(1.0);
-  
+
   ac.sendGoal(goal);
 
-  if (ac.waitForResult(goal.trajectory.points[goal.trajectory.points.size()-1].time_from_start + ros::Duration(5)))
+  if (ac.waitForResult(goal.trajectory.points[goal.trajectory.points.size() - 1].time_from_start + ros::Duration(5)))
   {
     ROS_INFO("Action server reported successful execution");
     return true;
-  } else {
+  }
+  else
+  {
     ROS_WARN("Action server could not execute trajectory");
     return false;
   }
 }
 
-bool waitForSubscribers(ros::Publisher & pub, ros::Duration timeout)
+bool waitForSubscribers(ros::Publisher &pub, ros::Duration timeout)
 {
-    if(pub.getNumSubscribers() > 0)
-        return true;
-    ros::Time start = ros::Time::now();
-    ros::Rate waitTime(0.5);
-    while(ros::Time::now() - start < timeout) {
-        waitTime.sleep();
-        if(pub.getNumSubscribers() > 0)
-            break;
-    }
-    return pub.getNumSubscribers() > 0;
+  if (pub.getNumSubscribers() > 0)
+    return true;
+  ros::Time start = ros::Time::now();
+  ros::Rate waitTime(0.5);
+  while (ros::Time::now() - start < timeout)
+  {
+    waitTime.sleep();
+    if (pub.getNumSubscribers() > 0)
+      break;
+  }
+  return pub.getNumSubscribers() > 0;
 }
 
-void addWeldingObject(moveit_msgs::PlanningScene& scene)
+void addWeldingObject(moveit_msgs::PlanningScene &scene)
 {
-  Eigen::Vector3d scale(0.001,0.001,0.001);
+  Eigen::Vector3d scale(0.001, 0.001, 0.001);
   Eigen::Affine3d pose;
-  pose = descartes_core::utils::toFrame( 2.0, 0.0, 0.012, 0.0, 0.0, M_PI_2, descartes_core::utils::EulerConventions::XYZ);
+  pose = descartes_core::utils::toFrame(2.0, 0.0, 0.012, 0.0, 0.0, M_PI_2, descartes_core::utils::EulerConventions::XYZ);
   //ros::package::getPath('descartes_tutorials')
   scene.world.collision_objects.push_back(
-    tutorial_utilities::makeCollisionObject("package://descartes_tutorials/meshes/profile.stl", scale, "Profile", pose)
-    );
+      tutorial_utilities::makeCollisionObject("package://descartes_tutorials/meshes/profile.stl", scale, "Profile", pose));
   scene.object_colors.push_back(tutorial_utilities::makeObjectColor("Profile", 0.5, 0.5, 0.5, 1.0));
 }
 
-void addTable(moveit_msgs::PlanningScene& scene)
+void addTable(moveit_msgs::PlanningScene &scene)
 {
-  Eigen::Vector3d scale(1.0,1.0,1.0);
+  Eigen::Vector3d scale(1.0, 1.0, 1.0);
   Eigen::Affine3d pose;
   pose = descartes_core::utils::toFrame(1.5, -0.6, 0.0, 0.0, 0.0, 0.0, descartes_core::utils::EulerConventions::XYZ);
   scene.world.collision_objects.push_back(
-    tutorial_utilities::makeCollisionObject("package://descartes_tutorials/meshes/table.stl", scale, "Table", pose)
-    );
+      tutorial_utilities::makeCollisionObject("package://descartes_tutorials/meshes/table.stl", scale, "Table", pose));
   scene.object_colors.push_back(tutorial_utilities::makeObjectColor("Table", 0.2, 0.2, 0.2, 1.0));
 }
