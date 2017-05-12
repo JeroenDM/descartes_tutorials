@@ -21,7 +21,7 @@ First, if you don't have a catkin workspace, you can [create one]http://wiki.ros
 
 Install catkin tools and rosdep used for building packages from source:
 
-  sudo apt-get install python-catkin-tools python-rosdep
+>  sudo apt-get install python-catkin-tools python-rosdep
   
 Now you can create the workspace (which is just a directory with some files in it).
 
