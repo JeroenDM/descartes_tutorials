@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: kr120_with_torch
+    relative_path: urdf/kr120_with_torch.urdf
+  SRDF:
+    relative_path: config/kr120_with_torch.srdf
+  CONFIG:
+    author_name: jeroen
+    author_email: jeroen.demaeyer@kuleuven.be
+    generated_timestamp: 1490603342

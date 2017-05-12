@@ -1,0 +1,1 @@
+rosrun moveit_ikfast create_ikfast_moveit_plugin.py kr120_with_torch manipulator kr120_with_torch_ikfast /home/jeroen/ros/temp_ws/src/kr120_with_torch_ikfast/src/kr120_with_torch_manipulator_ikfast_solver.cpp
