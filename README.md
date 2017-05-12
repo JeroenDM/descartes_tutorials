@@ -6,8 +6,16 @@ This tutorial will discuss: adding collision objects, visualizing trajectory poi
 
 ## Installation
 
-We still have to fix dependency issues, so installing can be difficult.
-Our current approach is to add all packages listed [here](https://github.com/JeroenDM/descartes_tutorials/blob/f692aeea18ae43eb451e67d006aca0808fefbf1f/worspace_structure.md) to your [workspace](http://wiki.ros.org/catkin/Tutorials/create_a_workspace).
+I assume you have installed [ros indigo](http://wiki.ros.org/indigo).
+Unfortunately this package cannot be installed just using apt-get.
+
+First, if you don't have a catkin workspace, you can create one:
+
+[...]
+
+Then, some of the packages are not realeased yet and have to be installed from source. If you don't have a github account, create a github account. (You can also download zip files, but ...)
+
+...
 
 ## How to launch?
 
