@@ -27,7 +27,11 @@ Now go to the workspace root folder, update dependencies, build the new packages
   source devel/setup.bash
 ```
 
-Now you should be able to launch the tutorial files "kuka_sim.launc" and "tutorial2.launch".
+Now you should be able to launch the tutorial files "kuka_sim.launch" and "tutorial2.launch" in the following folder:
+```
+catkin_ws/src/descartes_tutorials/descartes_tutorials/launch
+```
+To be able to run the simulation you have to open a first command terminal (don't forget to source the workspace by running `source devel/setup.bash`) and run the "kuka_sim.launch" file. Then, in a second terminal while leaving the first one running, launch "tutorial2.launch". (Don't forget to source the workspace again.)
 
 ### Longer explanation
 
