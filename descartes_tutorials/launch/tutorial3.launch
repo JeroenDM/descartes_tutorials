@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+  <param name="workObjectPath" value="$(find descartes_tutorials)/meshes/beam.stl"/>
+  <param name="workObjectID" value="beam"/>
+  <node name="tutorial3" pkg="descartes_tutorials" type="tutorial3" output="screen" />
+  
+</launch>
