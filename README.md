@@ -5,7 +5,7 @@ In this fork of the descartes_tutorials repo, we are working on a second tutoria
 This tutorial will discuss: adding collision objects, visualizing trajectory points and why a planned path can still contain collisions.
 
 
-(The instructions below will eventually also be added to [a tutorial on the ros wiki](http://wiki.ros.org/descartes/Tutorials/Robot%20Welding%20With%20Descartes).)
+The instructions below are also written in [a tutorial on the ros wiki](http://wiki.ros.org/descartes/Tutorials/Robot%20Welding%20With%20Descartes).
 
 ## Installation
 
@@ -31,7 +31,18 @@ Now you should be able to launch the tutorial files "kuka_sim.launch" and "tutor
 ```
 catkin_ws/src/descartes_tutorials/descartes_tutorials/launch
 ```
-To be able to run the simulation you have to open a first command terminal (don't forget to source the workspace by running `source devel/setup.bash`) and run the "kuka_sim.launch" file. Then, in a second terminal while leaving the first one running, launch "tutorial2.launch". (Don't forget to source the workspace again.)
+To be able to run the simulation you have to open a first command terminal (don't forget to source the workspace by running `source devel/setup.bash`) and run the "kuka_sim.launch" file.
+
+```
+  roslaunch descartes_tutorials kuka_sim.launch
+```
+
+Then, in a second terminal while leaving the first one running, launch "tutorial2.launch". (Don't forget to source the workspace again, as shown in the first line below.)
+
+```
+  source devel/setup.bash
+  roslaunch descartes_tutorials tutorial2.launch
+```
 
 ### Longer explanation
 
@@ -91,3 +102,16 @@ Now the instructions in the paragraph below should work.
 We added two new launch files, "kuka_sim.launc" and "tutorial2.launch".
 The first will launch the robot model in rviz for this tutorial.
 The second will execute the tutorial source code.
+
+Open a first command terminal (don't forget to source the workspace by running `source devel/setup.bash`) and run the "kuka_sim.launch" file.
+
+```
+  roslaunch descartes_tutorials kuka_sim.launch
+```
+
+Then, in a second terminal while leaving the first one running, launch "tutorial2.launch". (Don't forget to source the workspace again, as shown in the first line below.)
+
+```
+  source devel/setup.bash
+  roslaunch descartes_tutorials tutorial2.launch
+```
