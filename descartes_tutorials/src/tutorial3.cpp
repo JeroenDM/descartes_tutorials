@@ -21,6 +21,12 @@
 // visualize the trajectory points in RViz
 #include <visualization_msgs/MarkerArray.h>
 
+#include <iostream>
+#include <algorithm>
+#include <istream>
+#include <fstream>
+#include <sstream>
+
 typedef std::vector<descartes_core::TrajectoryPtPtr> TrajectoryVec;
 typedef TrajectoryVec::const_iterator TrajectoryIter;
 
@@ -64,6 +70,27 @@ void addWeldingObject(moveit_msgs::PlanningScene &planningScene);
  */
 void addTable(moveit_msgs::PlanningScene &planningScene);
 
+// constant for angle conversion
+// const double DEG_TO_RAD = 3.1415 / 180.0;
+const double DEG_TO_RAD = 1.0;
+
+// A pose data structure as intermediate variable for file reading
+struct Pose
+{
+    double x, y, z;
+    double alpha, beta, gamma;
+};
+
+/**
+ * Convert a csv file containing a path (from v-rep) to a vector with Poses
+ */
+std::vector<Pose> readFile(std::string fileName);
+
+/**
+ * Convert a Pose vector to a Affine3d vector
+ */
+std::vector<Eigen::Affine3d> poseToEigen(const std::vector<Pose> vPose);
+
 /**********************
   ** MAIN LOOP
 **********************/
@@ -104,38 +131,88 @@ int main(int argc, char **argv)
   }
 
   // 1. Define sequence of points
-  double xs, ys, zs, xe, ye, ze, rx, ry, rz;
-  xs = -0.135 + 2.0 - 0.02 - 0.2; // start point
-  ys = 0.01 - 1.0 + 0.02;
-  zs = 0.25 + 0.05;
+  // double xs, ys, zs, xe, ye, ze, rx, ry, rz;
+  // xs = -0.135 + 2.0 - 0.02 - 0.2; // start point
+  // ys = 0.01 - 1.0 + 0.02;
+  // zs = 0.25 + 0.05;
 
-  xe = -0.135 + 2.0 - 0.02 - 0.2; // end point
-  ye = 0.01 - 1.0 + 0.02;
-  ze = 0.5 - 0.01 - 0.05;
+  // xe = -0.135 + 2.0 - 0.02 - 0.2; // end point
+  // ye = 0.01 - 1.0 + 0.02;
+  // ze = 0.5 - 0.01 - 0.05;
 
-  rx = M_PI_2;
-  ry = M_PI_4;
-  rz = 0.0;
-  TrajectoryVec points;
-  int N_points = 9;
+  // rx = M_PI_2;
+  // ry = M_PI_4;
+  // rz = 0.0;
+  // TrajectoryVec points;
+  // int N_points = 9;
 
-  std::vector<Eigen::Affine3d> poses;
-  Eigen::Affine3d startPose;
-  Eigen::Affine3d endPose;
-  startPose = descartes_core::utils::toFrame(xs, ys, zs, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
-  endPose = descartes_core::utils::toFrame(xe, ye, ze, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
-  poses = tutorial_utilities::line(startPose, endPose, N_points);
+  // std::vector<Eigen::Affine3d> poses;
+  // Eigen::Affine3d startPose;
+  // Eigen::Affine3d endPose;
+  // startPose = descartes_core::utils::toFrame(xs, ys, zs, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
+  // endPose = descartes_core::utils::toFrame(xe, ye, ze, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
+  // poses = tutorial_utilities::line(startPose, endPose, N_points);
 
-  for (unsigned int i = 0; i < N_points; ++i)
+   // read path file
+  std::vector<Pose> path_vector;
+  std::string local_path;
+  
+  if (nh.getParam("/local_path", local_path))
   {
-    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i], 0.0, 0.4, M_PI);
+    std::cout << local_path << std::endl;
+  }
+  else
+  {
+    std::cout << "Path not found" << std::endl;
+   }
+  
+  path_vector = readFile(local_path + "path_data.csv");
+  std::vector<Eigen::Affine3d> path_frames;
+  path_frames = poseToEigen(path_vector);
+
+  // add path to weld and from weld
+  //-------------------------------
+  Eigen::Matrix3d Rxyz;
+  Eigen::Vector3d Pxyz;
+  Eigen::Vector3d vz(0, 0, -0.1);
+  // rotation of first path point frame refered to world frame
+  Rxyz = path_frames[0].linear();
+  // location of first path point frame + backwards z translation relative in local frame
+  Pxyz = path_frames[0].translation() + Rxyz * vz;
+  Eigen::Affine3d new_pose;
+  new_pose.linear() = Rxyz;
+  new_pose.translation() = Pxyz;
+  std::vector<Eigen::Affine3d> move_in;
+  move_in = tutorial_utilities::line(new_pose, path_frames[0], 3);
+
+  // add to path
+  path_frames.insert(path_frames.begin(), move_in.begin(), move_in.end());
+
+
+  // rotation of first path point frame refered to world frame
+  Rxyz = path_frames.back().linear();
+  // location of first path point frame + backwards z translation relative in local frame
+  Pxyz = path_frames.back().translation() + Rxyz * vz;
+
+  new_pose.linear() = Rxyz;
+  new_pose.translation() = Pxyz;
+
+  move_in = tutorial_utilities::line(path_frames.back(), new_pose, 3);
+
+  // add to path
+  path_frames.insert(path_frames.end(), move_in.begin(), move_in.end());
+
+  TrajectoryVec points;
+  for (unsigned int i = 0; i < path_frames.size(); ++i)
+  {
+    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(path_frames[i], 0.0, 0.4, M_PI);
     points.push_back(pt);
   }
 
   // Visualize the trajectory points in RViz
   // Transform the generated poses into a markerArray message that can be visualized by RViz
   visualization_msgs::MarkerArray ma;
-  ma = tutorial_utilities::createMarkerArray(poses);
+  ma = tutorial_utilities::createMarkerArray(path_frames);
   // Start the publisher for the Rviz Markers
   ros::Publisher vis_pub = nh.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
 
@@ -353,4 +430,71 @@ void addTable(moveit_msgs::PlanningScene &scene)
   scene.world.collision_objects.push_back(
       tutorial_utilities::makeCollisionObject("package://descartes_tutorials/meshes/table.stl", scale, "Table", pose));
   scene.object_colors.push_back(tutorial_utilities::makeObjectColor("Table", 0.2, 0.2, 0.2, 1.0));
+}
+
+std::vector<Pose> readFile(std::string fileName) {
+    using namespace std;
+    cout << "Reading file: " << fileName << endl;
+
+    vector<Pose> path;
+
+    ifstream inf(fileName);
+    if (!inf) {
+        cerr << "Error in reading file." << endl;
+        exit(1);
+    }
+
+    int pi = 0; // point index
+    while (inf) {
+        // read one line of the data file
+        string oneLine;
+        getline(inf, oneLine);
+
+        // read data point if not empty (the end of the file)
+        if (!oneLine.empty()) {
+            // replace comma's with spaces for use as stringstream
+            replace(oneLine.begin(), oneLine.end(), ',', ' ');
+
+            // add extra path pose
+            path.push_back({0});
+
+            // add new values to path vector using a stringstreamobject for convenience
+            stringstream ss(oneLine);
+            ss >> path[pi].x >> path[pi].y >> path[pi].z;
+            ss >> path[pi].alpha >> path[pi].beta >> path[pi].gamma;
+            pi += 1;
+
+            // print progress bar
+            cout << "=";
+        }
+    }
+    // next line after progress bar
+    cout << endl;
+
+    return path;
+}
+
+std::vector<Eigen::Affine3d> poseToEigen(const std::vector<Pose> vPose) {
+
+    using namespace std;
+    int len = static_cast<int>(vPose.size());
+
+    // create vector to store result
+    vector<Eigen::Affine3d> result;
+
+    for (int pi=0; pi<len; ++pi) {
+        Eigen::Affine3d pose;
+
+        pose = Eigen::Translation3d(vPose[pi].x, vPose[pi].y, vPose[pi].z);
+        Eigen::Matrix3d m;
+        m = Eigen::AngleAxisd(vPose[pi].alpha * DEG_TO_RAD, Eigen::Vector3d::UnitX())
+            * Eigen::AngleAxisd(vPose[pi].beta * DEG_TO_RAD, Eigen::Vector3d::UnitY())
+            * Eigen::AngleAxisd(vPose[pi].gamma * DEG_TO_RAD, Eigen::Vector3d::UnitZ());
+
+        pose.linear() = m;
+
+        result.push_back(pose);
+    }
+
+    return result;
 }
