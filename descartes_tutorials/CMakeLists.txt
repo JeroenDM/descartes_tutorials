@@ -24,6 +24,7 @@ include_directories(
 add_executable(${PROJECT_NAME}_tutorial1 src/tutorial1.cpp)
 add_executable(${PROJECT_NAME}_tutorial2 src/tutorial2.cpp)
 add_executable(${PROJECT_NAME}_tutorial3 src/tutorial3.cpp)
+add_executable(${PROJECT_NAME}_test_move_group src/test_move_group.cpp)
 
 target_link_libraries(${PROJECT_NAME}_tutorial1
   ${catkin_LIBRARIES}
@@ -32,6 +33,10 @@ target_link_libraries(${PROJECT_NAME}_tutorial2
   ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_tutorial3
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(${PROJECT_NAME}_test_move_group
   ${catkin_LIBRARIES}
 )
 
@@ -44,6 +49,11 @@ set_target_properties(${PROJECT_NAME}_tutorial2
 set_target_properties(${PROJECT_NAME}_tutorial3
   PROPERTIES OUTPUT_NAME tutorial3
   PREFIX "")
+
+set_target_properties(${PROJECT_NAME}_test_move_group
+  PROPERTIES OUTPUT_NAME test_move_group
+  PREFIX "")
+
 
 
 #############
@@ -63,6 +73,12 @@ install(TARGETS ${PROJECT_NAME}_tutorial2
 )
 
 install(TARGETS ${PROJECT_NAME}_tutorial3
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(TARGETS ${PROJECT_NAME}_test_move_group
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

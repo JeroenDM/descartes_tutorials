@@ -4,6 +4,6 @@
   <param name="workObjectPath" value="$(find descartes_tutorials)/meshes/beam.stl"/>
   <param name="workObjectID" value="beam"/>
   <param name="local_path" value="$(find descartes_tutorials)/data/"/>
-  <node name="tutorial3" pkg="descartes_tutorials" type="tutorial3" output="screen" />
+  <node name="test_move_group" pkg="descartes_tutorials" type="test_move_group" output="screen" />
   
 </launch>
