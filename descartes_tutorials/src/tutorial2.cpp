@@ -112,7 +112,7 @@ int main(int argc, char **argv)
   ry = (M_PI / 2) + M_PI / 4;
   rz = 0.0;
   TrajectoryVec points;
-  int N_points = 9;
+  int N_points = 30;
 
   std::vector<Eigen::Affine3d> poses;
   Eigen::Affine3d startPose;
@@ -121,9 +121,14 @@ int main(int argc, char **argv)
   endPose = descartes_core::utils::toFrame(x, y + 0.4, z, rx, ry, rz, descartes_core::utils::EulerConventions::XYZ);
   poses = tutorial_utilities::line(startPose, endPose, N_points);
 
+  double rx_tol, ry_tol, rz_tol;
+  rx_tol = 0.0;
+  ry_tol = M_PI_4;
+  rz_tol = M_PI;
+
   for (unsigned int i = 0; i < N_points; ++i)
   {
-    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i], 0.0, 0.4, M_PI);
+    descartes_core::TrajectoryPtPtr pt = makeTolerancedCartesianPoint(poses[i], rx_tol, ry_tol, rz_tol);
     points.push_back(pt);
   }
 
