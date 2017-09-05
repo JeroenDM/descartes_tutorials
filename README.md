@@ -7,6 +7,8 @@ This tutorial will discuss: adding collision objects, visualizing trajectory poi
 
 The instructions below are also written in [a tutorial on the ros wiki](http://wiki.ros.org/descartes/Tutorials/Robot%20Welding%20With%20Descartes).
 
+In an aditional branch, [new_cost_function](https://github.com/JeroenDM/descartes_tutorials/tree/new_cost_function), the use of an alternative cost function for the graph search is demonstrated. It is important to notice that also for the [modified descartes package](https://github.com/JeroenDM/descartes), the branch has to be changed to [new_cost_function](https://github.com/JeroenDM/descartes/tree/new_cost_function).
+
 ## Installation
 
 ### Quickstart with existing workspace
